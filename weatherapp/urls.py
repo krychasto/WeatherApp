@@ -21,4 +21,5 @@ urlpatterns = [
     path('', views.home),
     path('weather/', views.index),
     path('admin/', admin.site.urls),
+    path('weather/new_search', views.new_search)
 ]

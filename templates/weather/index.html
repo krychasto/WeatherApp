@@ -2,13 +2,22 @@
 
 {% block content %}
 <div class="row">
-	<div class="col4">
-		<ul class="collection">
-			{% for item in weather %}
-				    <li class="collection-item list__item-flex">{{ item }}
-				    </li>
-			{% endfor %}
-    </ul>
-	</div>
+	<form action="new_search" method="post">
+    	<div class="input-field col s6">
+			<input type="text" name="content" class="validate">
+			<label class="active">City</label>
+		</div>
+			<button class="btn waves-effect waves-light" type="submit">Search</button>
+	</form>
+</div>
+<div class="card-panel cyan lighten-5 center">
+	<h1>{{ weather.city }}</h1>
+	<h4>{{ weather.weather_main }}</h4>
+	<h1>{{ weather.temp }}°</h1>
+	<h6>Do: {{ weather.temp_max }}° Od: {{ weather.temp_min }}°</h6>
+	<h6>Odczuwalne</h6>
+	<h6>{{ weather.feels_like }}°C</h6>
+	<h6>Ciśnienie</h6>
+	<h6>{{ weather.pressure }} hPa</h6>
 </div>
 {% endblock content %}
