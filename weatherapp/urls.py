@@ -19,7 +19,7 @@ from weather import views
 
 urlpatterns = [
     path('', views.home),
-    path('weather/', views.index),
+    path('weather/', views.new_search),
     path('admin/', admin.site.urls),
-    path('weather/new_search', views.new_search)
+    path('weather/new_search', views.new_search),
 ]
