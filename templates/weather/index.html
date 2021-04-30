@@ -1,15 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-	<form action="new_search" method="post">
-    	<div class="input-field col s6">
-			<input type="text" name="content" class="validate">
-			<label class="active">City</label>
-		</div>
-			<button class="btn waves-effect waves-light" type="submit">Search</button>
-	</form>
-</div>
 <div class="card-panel cyan lighten-5 center">
 	<h1>{{ weather.city }}</h1>
 	<h4>{{ weather.weather_main }}</h4>

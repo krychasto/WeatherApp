@@ -18,8 +18,16 @@
 <body>
     <nav class="cyan accent-4">
         <div class="container">
-            <a href="#" class="brand-logo center"><i class="material-icons">cloud</i>WeatherApp</a>
+            <a href="#" class="brand-logo center"><i class="material-icons">cloud</i>WeatherApp</a></div>
+        <div class="nav-wrapper">
+      <form action="new_search" method="post">
+        <div class="input-field">
+          <input id="text" name="content" type="search" required>
+          <label class="label-icon" for="text"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
         </div>
+      </form>
+    </div>
     </nav>
 	<div class="container">
         {% block content %}{% endblock content %}
