@@ -1,7 +1,11 @@
+import json
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import Temperature
+from geopy.geocoders import Nominatim
+import time
 import requests
 
 def home(request):
@@ -9,16 +13,28 @@ def home(request):
 
 @csrf_exempt
 def new_search(request):
-    temp_obj = Temperature.objects.all()
+    geolocator = Nominatim(user_agent="weather")
+    Temperature.objects.all().delete()
+
     try:
         city = request.POST["content"]
+        location = geolocator.geocode(city)
+        daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat='+str(location.latitude)+'&lon='+str(location.longitude)+'&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
         api_link = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
+        print(daily_api_link)
     except:
         api_link = 'http://api.openweathermap.org/data/2.5/weather?q=Twardogora&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
-    response = requests.get(api_link)
-    weather_obj = response.json()
+        location = geolocator.geocode('Twardogora')
+        daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + str(location.latitude) + '&lon=' + str(location.longitude) + '&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
+
+    daily_weather_response = requests.get(daily_api_link)
+    daily_obj = daily_weather_response.json()['daily']
+
+    current_weather_response = requests.get(api_link)
+    weather_obj = current_weather_response.json()
+
     try:
-        front_obj = {
+        current_weather = {
             "city": weather_obj['name'],
             "temp": weather_obj['main']['temp'],
             "temp_min": weather_obj['main']['temp_min'],
@@ -27,9 +43,14 @@ def new_search(request):
             "pressure": weather_obj['main']['pressure'],
             "weather_main": weather_obj['weather'][0]['main'],
         }
+        for n,day in enumerate(daily_obj):
+            day_name = time.ctime(int(day['dt']))[:3]
+            day_temp = day['temp']['day']
+            Temperature.objects.create(day=day_name,temp=day_temp)
     except:
         return HttpResponseRedirect('/')
+    temp_obj = Temperature.objects.all()
     return render(request, 'weather/index.html', {
-        "weather": front_obj,
+        "weather": current_weather,
         "qs": temp_obj,
     })
