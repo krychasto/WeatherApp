@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from .models import Temperature
 import requests
 
 def home(request):
@@ -8,6 +9,7 @@ def home(request):
 
 @csrf_exempt
 def new_search(request):
+    temp_obj = Temperature.objects.all()
     try:
         city = request.POST["content"]
         api_link = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
@@ -29,4 +31,5 @@ def new_search(request):
         return HttpResponseRedirect('/')
     return render(request, 'weather/index.html', {
         "weather": front_obj,
+        "qs": temp_obj,
     })
