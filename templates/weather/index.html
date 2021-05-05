@@ -6,7 +6,7 @@
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [{% for item in qs %}'{{item.day}}',{% endfor %}],
+                labels: [{% for item in qs %}'{{item.hour}}',{% endfor %}],
                 datasets: [{
                     label: 'Temperature',
                     data: [{% for item in qs %}'{{item.temp}}',{% endfor %}],

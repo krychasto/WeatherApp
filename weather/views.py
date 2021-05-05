@@ -28,7 +28,7 @@ def new_search(request):
         daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + str(location.latitude) + '&lon=' + str(location.longitude) + '&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
 
     daily_weather_response = requests.get(daily_api_link)
-    daily_obj = daily_weather_response.json()['daily']
+    daily_obj = daily_weather_response.json()['hourly']
 
     current_weather_response = requests.get(api_link)
     weather_obj = current_weather_response.json()
@@ -44,9 +44,9 @@ def new_search(request):
             "weather_main": weather_obj['weather'][0]['main'],
         }
         for n,day in enumerate(daily_obj):
-            day_name = time.ctime(int(day['dt']))[:3]
-            day_temp = day['temp']['day']
-            Temperature.objects.create(day=day_name,temp=day_temp)
+            day_hour = time.ctime(int(day['dt']))[11:16]
+            day_temp = day['temp']
+            Temperature.objects.create(hour=day_hour,temp=day_temp)
     except:
         return HttpResponseRedirect('/')
     temp_obj = Temperature.objects.all()
