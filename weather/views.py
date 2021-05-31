@@ -16,13 +16,13 @@ def new_search(request):
     geolocator = Nominatim(user_agent="weather")
     Temperature.objects.all().delete()
 
-    try:
+    if request.method == "POST":
         city = request.POST["content"]
         location = geolocator.geocode(city)
         daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat='+str(location.latitude)+'&lon='+str(location.longitude)+'&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
         api_link = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
         print(daily_api_link)
-    except:
+    else:
         api_link = 'http://api.openweathermap.org/data/2.5/weather?q=Twardogora&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
         location = geolocator.geocode('Twardogora')
         daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + str(location.latitude) + '&lon=' + str(location.longitude) + '&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
@@ -43,7 +43,7 @@ def new_search(request):
             "pressure": weather_obj['main']['pressure'],
             "weather_main": weather_obj['weather'][0]['main'],
         }
-        for n,day in enumerate(daily_obj):
+        for n, day in enumerate(daily_obj):
             day_hour = time.ctime(int(day['dt']))[11:16]
             day_temp = day['temp']
             Temperature.objects.create(hour=day_hour,temp=day_temp)
