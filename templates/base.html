@@ -8,10 +8,10 @@
     <title>WeatherApp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="{% static "css/style.css" %}">
-    <!--Materialize-->
+    <!--Materialize
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>-->
     <!--Chart js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
@@ -21,7 +21,7 @@
 </head>
 <body>
 {% block scripts %}{% endblock scripts %}
-    <nav class="cyan accent-4">
+    <!--<nav class="cyan accent-4">
         <div class="container">
             <a href="#" class="brand-logo center"><i class="material-icons">cloud</i>WeatherApp</a></div>
         <div class="nav-wrapper">
@@ -33,9 +33,23 @@
         </div>
       </form>
     </div>
-    </nav>
-	<div class="container">
-        {% block content %}{% endblock content %}
+    </nav>-->
+	<div class="app__details-sun">
+      <div class="header">
+          <div class="logo">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10.5 17H4v-2h6.5a3.5 3.5 0 1 1-3.278 4.73l1.873-.703A1.5 1.5 0 1 0 10.5 17zM5 11h13.5a3.5 3.5 0 1 1-3.278 4.73l1.873-.703A1.5 1.5 0 1 0 18.5 13H5a3 3 0 0 1 0-6h8.5a1.5 1.5 0 1 0-1.405-2.027l-1.873-.702A3.501 3.501 0 0 1 17 5.5 3.5 3.5 0 0 1 13.5 9H5a1 1 0 1 0 0 2z"/></svg>
+              weather
+          </div>
+          <form action="new_search" method="post">
+            <div class="search">
+                <div class="search__icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <input id="text" name="content" type="search" required>
+            </div>
+          </form>
+      </div>
+      {% block content %}{% endblock content %}
 	</div>
 </body>
 

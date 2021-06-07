@@ -42,7 +42,7 @@
 </script>
 {% endblock scripts %}
 {% block content %}
-<div class="card-panel cyan lighten-5 center">
+<!--<div class="card-panel cyan lighten-5 center">
 	<h1>{{ weather.city }}</h1>
 	<h4>{{ weather.weather_main }}</h4>
 	<h1>{{ weather.temp }}°</h1>
@@ -52,5 +52,24 @@
 	<h6>Ciśnienie</h6>
 	<h6>{{ weather.pressure }} hPa</h6>
 	<canvas id="myChart" width="200" height="50"></canvas>
+</div>-->
+<div class="content">
+    <p class="content__grid-item-location">
+        <span class="content__grid-item-location-city">{{ weather.city }}</span><br/>
+        <span class="content__grid-item-location-country">-</span>
+    </p>
+    <p class="content__grid-item-temp">
+        {{ weather.temp }}°
+    </p>
+    <p class="content__grid-item-location">
+        <span class="content__grid-item-location-humidity"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 3.1L7.05 8.05a7 7 0 1 0 9.9 0L12 3.1zm0-2.828l6.364 6.364a9 9 0 1 1-12.728 0L12 .272z"/></svg>-</span><br/>
+        <span class="content__grid-item-location-hpa"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M8 5a4 4 0 1 1 8 0v5.255a7 7 0 1 1-8 0V5zm1.144 6.895a5 5 0 1 0 5.712 0L14 11.298V5a2 2 0 1 0-4 0v6.298l-.856.597zm1.856.231V5h2v7.126A4.002 4.002 0 0 1 12 20a4 4 0 0 1-1-7.874zM12 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>{{ weather.pressure }} hPa</span>
+    </p>
+    <div class="app__details-sun-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></svg>
+    </div>
+    <div style="width: 70vw; height: 20vh;">
+        <canvas id="myChart" width="200" height="100"></canvas>
+    </div>
 </div>
 {% endblock content %}
