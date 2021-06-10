@@ -13,19 +13,21 @@ def home(request):
 
 @csrf_exempt
 def new_search(request):
-    geolocator = Nominatim(user_agent="weather")
-    Temperature.objects.all().delete()
 
     if request.method == "POST":
         city = request.POST["content"]
-        location = geolocator.geocode(city)
-        daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat='+str(location.latitude)+'&lon='+str(location.longitude)+'&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
-        api_link = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
-        print(daily_api_link)
-    else:
-        api_link = 'http://api.openweathermap.org/data/2.5/weather?q=Twardogora&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
-        location = geolocator.geocode('Twardogora')
-        daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + str(location.latitude) + '&lon=' + str(location.longitude) + '&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
+        return HttpResponseRedirect('/weather/{}'.format(city))
+    return HttpResponseRedirect('/weather/sycow')
+
+@csrf_exempt
+def city_search(request, city):
+    geolocator = Nominatim(user_agent="weather")
+    Temperature.objects.all().delete()
+    location = geolocator.geocode(city)
+    daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat='+str(location.latitude)+'&lon='+str(location.longitude)+'&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
+    api_link = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
+    print(daily_api_link)
+
 
     daily_weather_response = requests.get(daily_api_link)
     daily_obj = daily_weather_response.json()['hourly']
@@ -54,3 +56,6 @@ def new_search(request):
         "weather": current_weather,
         "qs": temp_obj,
     })
+
+#def main(request):
+#    return render(request, 'weather/main.html')

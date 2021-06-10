@@ -22,4 +22,6 @@ urlpatterns = [
     path('weather/', views.new_search),
     path('admin/', admin.site.urls),
     path('weather/new_search', views.new_search),
+    path('weather/<str:city>', views.city_search),
+    # path('weather/main', views.main),
 ]
