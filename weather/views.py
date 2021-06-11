@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from .models import Temperature
+from .models import Temperature, Favorite
 from geopy.geocoders import Nominatim
 import time
 import requests
@@ -26,14 +26,15 @@ def city_search(request, city):
     location = geolocator.geocode(city)
     daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat='+str(location.latitude)+'&lon='+str(location.longitude)+'&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
     api_link = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
-    print(daily_api_link)
-
+    #print(daily_api_link)
 
     daily_weather_response = requests.get(daily_api_link)
     daily_obj = daily_weather_response.json()['hourly']
 
     current_weather_response = requests.get(api_link)
     weather_obj = current_weather_response.json()
+
+
 
     try:
         current_weather = {
@@ -57,5 +58,16 @@ def city_search(request, city):
         "qs": temp_obj,
     })
 
-#def main(request):
-#    return render(request, 'weather/main.html')
+def main(request):
+    return render(request, 'weather/main.html')
+
+def add_to_favorite(request):
+    if request.method == 'POST':
+        path = request.get_full_path()
+        city = path.split("/")[2]
+        geolocator = Nominatim(user_agent="weather")
+        location = geolocator.geocode(city)
+        link = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + str(location.latitude) + '&lon=' + str(location.longitude) + '&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
+        Favorite.objects.create(city=city, link=link)
+        return HttpResponseRedirect('/main')
+    return HttpResponseRedirect('/')
