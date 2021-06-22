@@ -25,4 +25,6 @@ urlpatterns = [
     path('weather/<str:city>', views.city_search),
     path('main/', views.main),
     path('main/new_search', views.new_search),
+    path('main/add_to_favorite', views.add_to_favorite),
+
 ]

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="content">
+  <div class="content__grid-container">
+    <div class="content__grid">
+        {% for element in fav %}
+      <a href={{element.link}}>
+        <div class="content__grid-item">
+            <p class="content__grid-item-temp">
+              {{element.tempr}}°
+            </p>
+            <div class="content__grid-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M14 18v-2h3.5a3.5 3.5 0 1 0-2.5-5.95V10a6 6 0 1 0-12 0v.007H1V10a8 8 0 0 1 15.458-2.901A5.5 5.5 0 1 1 17.5 18H14zm-8 2h10v2H6v-2zm0-8h8v2H6v-2zm-4 4h10v2H2v-2z"/></svg>
+            </div>
+            <p class="content__grid-item-location">
+              <span class="content__grid-item-city">{{element.city}}</span><br/>
+              <span>{{element.country}}</span>
+            </p>
+        </div>
+      </a>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+<div class="footer"></div>
+{% endblock content %}

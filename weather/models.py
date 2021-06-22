@@ -12,6 +12,8 @@ class Temperature(models.Model):
 class Favorite(models.Model):
     link = models.CharField(max_length=300)
     city = models.CharField(max_length=200)
+    country = models.CharField(max_length=200)
+    tempr = models.IntegerField(max_length=20)
 
     def __str__(self):
         return self.city

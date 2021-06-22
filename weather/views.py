@@ -13,7 +13,6 @@ def home(request):
 
 @csrf_exempt
 def new_search(request):
-
     if request.method == "POST":
         city = request.POST["content"]
         return HttpResponseRedirect('/weather/{}'.format(city))
@@ -33,8 +32,7 @@ def city_search(request, city):
 
     current_weather_response = requests.get(api_link)
     weather_obj = current_weather_response.json()
-
-
+    path = request.build_absolute_uri()
 
     try:
         current_weather = {
@@ -56,18 +54,34 @@ def city_search(request, city):
     return render(request, 'weather/index.html', {
         "weather": current_weather,
         "qs": temp_obj,
+        "path": path,
     })
 
 def main(request):
-    return render(request, 'weather/main.html')
+    fav = Favorite.objects.all()
+    return render(request, 'weather/main.html', {
+        "fav": fav,
+    })
 
+@csrf_exempt
 def add_to_favorite(request):
     if request.method == 'POST':
-        path = request.get_full_path()
-        city = path.split("/")[2]
-        geolocator = Nominatim(user_agent="weather")
-        location = geolocator.geocode(city)
-        link = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + str(location.latitude) + '&lon=' + str(location.longitude) + '&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
-        Favorite.objects.create(city=city, link=link)
-        return HttpResponseRedirect('/main')
-    return HttpResponseRedirect('/')
+        if Favorite.objects.all().count() <= 5:
+            path = request.POST.get('path')
+            city = path.split("/")[4]
+            print(city)
+            geolocator = Nominatim(user_agent="weather")
+            location = geolocator.geocode(city)
+            country = str(location).split(',')
+            country = country[len(country)-1]
+
+            api_link = 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
+            current_weather_response = requests.get(api_link)
+            weather_obj = current_weather_response.json()
+            print(path[:len(path)-1])
+
+            Favorite.objects.create(link=path[:len(path)-1], city=city, country=country, tempr=int(round(weather_obj['main']['temp'])))
+            return HttpResponseRedirect('/main')
+        else:
+            return HttpResponseRedirect('/main')
+    return HttpResponseRedirect('/main')
