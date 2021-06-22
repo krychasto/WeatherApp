@@ -316,4 +316,8 @@ body {
 .content {
   padding: 0 2vh;
 }
+
+a {
+    text-decoration: none;
+}
 /*# sourceMappingURL=style.css.map */

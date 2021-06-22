@@ -9,7 +9,7 @@ import time
 import requests
 
 def home(request):
-    return HttpResponseRedirect('weather/')
+    return HttpResponseRedirect('main/')
 
 @csrf_exempt
 def new_search(request):
