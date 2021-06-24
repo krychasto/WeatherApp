@@ -23,15 +23,19 @@ def city_search(request, city):
     geolocator = Nominatim(user_agent="weather")
     Temperature.objects.all().delete()
     location = geolocator.geocode(city)
+    country = str(location).split(',')
+    country = country[len(country) - 1]
     daily_api_link = 'https://api.openweathermap.org/data/2.5/onecall?lat='+str(location.latitude)+'&lon='+str(location.longitude)+'&units=metric&exclude=current&appid=50f91fe67a5661be4a20aa945d246ba3'
     api_link = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
-    #print(daily_api_link)
 
     daily_weather_response = requests.get(daily_api_link)
     daily_obj = daily_weather_response.json()['hourly']
 
+    #print(daily_obj)
+
     current_weather_response = requests.get(api_link)
     weather_obj = current_weather_response.json()
+    print(weather_obj)
     path = request.build_absolute_uri()
 
     try:
@@ -43,6 +47,8 @@ def city_search(request, city):
             "feels_like": weather_obj['main']['feels_like'],
             "pressure": weather_obj['main']['pressure'],
             "weather_main": weather_obj['weather'][0]['main'],
+            "humidity": weather_obj['main']['humidity'],
+            "country": country,
         }
         for n, day in enumerate(daily_obj):
             day_hour = time.ctime(int(day['dt']))[11:16]
@@ -64,24 +70,22 @@ def main(request):
     })
 
 @csrf_exempt
-def add_to_favorite(request):
-    if request.method == 'POST':
-        if Favorite.objects.all().count() <= 5:
-            path = request.POST.get('path')
-            city = path.split("/")[4]
-            print(city)
-            geolocator = Nominatim(user_agent="weather")
-            location = geolocator.geocode(city)
-            country = str(location).split(',')
-            country = country[len(country)-1]
-
-            api_link = 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
-            current_weather_response = requests.get(api_link)
-            weather_obj = current_weather_response.json()
-            print(path[:len(path)-1])
-
-            Favorite.objects.create(link=path[:len(path)-1], city=city, country=country, tempr=int(round(weather_obj['main']['temp'])))
-            return HttpResponseRedirect('/main')
-        else:
-            return HttpResponseRedirect('/main')
+def add_to_favorite(request, city):
+    if Favorite.objects.all().count() <= 5:
+        geolocator = Nominatim(user_agent="weather")
+        location = geolocator.geocode(city)
+        country = str(location).split(',')
+        country = country[len(country)-1]
+        api_link = 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&appid=50f91fe67a5661be4a20aa945d246ba3'
+        current_weather_response = requests.get(api_link)
+        weather_obj = current_weather_response.json()
+        Favorite.objects.create(link="/weather/"+str(city), city=city, country=country, tempr=int(round(weather_obj['main']['temp'])))
+        return HttpResponseRedirect('/main')
+    else:
+        return HttpResponseRedirect('/main')
     return HttpResponseRedirect('/main')
+
+@csrf_exempt
+def delete_favorite(request, id):
+	Favorite.objects.get(id=id).delete()
+	return HttpResponseRedirect("/")

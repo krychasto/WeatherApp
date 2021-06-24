@@ -56,16 +56,16 @@
 <div class="content">
     <p class="content__grid-item-location">
         <span class="content__grid-item-location-city">{{ weather.city }}</span><br/>
-        <span class="content__grid-item-location-country">-</span>
+        <span class="content__grid-item-location-country">{{ weather.country }}</span>
     </p>
     <p class="content__grid-item-temp">
         {{ weather.temp }}°
     </p>
-    <form action="/main/add_to_favorite" method="POST">
-        <input type="submit" type="button" name="path" value={{path}}/>
+    <form action="/main/add_to_favorite/{{ weather.city }}" method="POST">
+        <button type="submit">Add to favorite</button>
     </form>
     <p class="content__grid-item-location">
-        <span class="content__grid-item-location-humidity"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 3.1L7.05 8.05a7 7 0 1 0 9.9 0L12 3.1zm0-2.828l6.364 6.364a9 9 0 1 1-12.728 0L12 .272z"/></svg>-</span><br/>
+        <span class="content__grid-item-location-humidity"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 3.1L7.05 8.05a7 7 0 1 0 9.9 0L12 3.1zm0-2.828l6.364 6.364a9 9 0 1 1-12.728 0L12 .272z"/></svg>{{ weather.humidity }}%</span><br/>
         <span class="content__grid-item-location-hpa"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M8 5a4 4 0 1 1 8 0v5.255a7 7 0 1 1-8 0V5zm1.144 6.895a5 5 0 1 0 5.712 0L14 11.298V5a2 2 0 1 0-4 0v6.298l-.856.597zm1.856.231V5h2v7.126A4.002 4.002 0 0 1 12 20a4 4 0 0 1-1-7.874zM12 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>{{ weather.pressure }} hPa</span>
     </p>
     <div class="app__details-sun-container">

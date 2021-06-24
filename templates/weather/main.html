@@ -17,6 +17,9 @@
               <span class="content__grid-item-city">{{element.city}}</span><br/>
               <span>{{element.country}}</span>
             </p>
+            <form action="/main/delete_favorite/{{ element.id }}" method="POST">
+                <button type="submit">Delete</button>
+            </form>
         </div>
       </a>
         {% endfor %}
